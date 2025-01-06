@@ -16,9 +16,16 @@ const AllUsers = () => {
 
   const handUserMakeAdmin = (user) => {
     axiosSecure.patch(`users/admin/${user._id}`).then((res) => {
-      console.log(res.data)
-      if(res.data.modifiedCount>0){
-        
+      console.log(res.data);
+      if (res.data.modifiedCount > 0) {
+        refetch();
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: `${user.name} is now admin`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
     });
   };
@@ -72,12 +79,16 @@ const AllUsers = () => {
                 <td>{user.name}</td>
                 <td>{user.email}</td>
                 <td>
-                  <button
-                    onClick={() => handUserMakeAdmin(user)}
-                    className="btn btn-lg bg-orange-400"
-                  >
-                    <FaUsers className="text-white text-2xl"></FaUsers>
-                  </button>
+                  {user.role === "admin" ? (
+                    "Admin"
+                  ) : (
+                    <button
+                      onClick={() => handUserMakeAdmin(user)}
+                      className="btn btn-lg bg-orange-400"
+                    >
+                      <FaUsers className="text-white text-2xl"></FaUsers>
+                    </button>
+                  )}
                 </td>
                 <td>
                   {" "}

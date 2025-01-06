@@ -1,12 +1,13 @@
-import React, { useContext } from "react";
-import { AuthContext } from "../Providers/AuthProvider";
-import { Navigate, useLocation } from "react-router-dom";
+import React from "react";
+import useAdmin from "../Hooks/useAdmin";
 import useAuth from "../Hooks/useAuth";
+import { Navigate, useLocation } from "react-router-dom";
 
-const PrivateRoute = ({ children }) => {
-  const { user, loading } = useAuth();
+const AdminRout = (children) => {
+  const [user, loading] = useAuth();
+  const [isAdmin, isAdminLoading] = useAdmin();
   const location = useLocation();
-  if (loading) {
+  if (loading || isAdminLoading) {
     return (
       <div
         className="radial-progress"
@@ -17,10 +18,10 @@ const PrivateRoute = ({ children }) => {
       </div>
     );
   }
-  if (user) {
+  if (user && isAdmin) {
     return children;
   }
   return <Navigate to={"/login"} state={{ from: location }} replace></Navigate>;
 };
 
-export default PrivateRoute;
+export default AdminRout;
